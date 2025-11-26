@@ -1,22 +1,22 @@
 package modele;
 
 import java.awt.Color;
+import util.Point;
+
 
 public class Equipe {
 
     private final Color couleur;
     private int score;
 
-    private volatile int cibleX;
-    private volatile int cibleY;
+    private volatile Point cible;
 
     private volatile GrilleGradient grilleGradient;
 
-    public Equipe(Color couleur, int cibleX, int cibleY) {
+    public Equipe(Color couleur, Point cible) {
         this.couleur = couleur;
         this.score = 0;
-        this.cibleX = cibleX;
-        this.cibleY = cibleY;
+        this.cible = cible;
     }
 
     public Color getCouleur() {
@@ -35,14 +35,11 @@ public class Equipe {
     public void setGrilleGradient(GrilleGradient grilleGradient) {
         this.grilleGradient = grilleGradient;
     }
-    public int getCibleX() {
-        return cibleX;
+    public void setCible(Point cible) {
+        this.cible = cible;
     }
-    public int getCibleY() {
-        return cibleY;
-    }
-    public void setCible(int x, int y) {
-        this.cibleX = x;
-        this.cibleY = y;
+
+    public Point getCible(){
+        return this.cible;
     }
 }

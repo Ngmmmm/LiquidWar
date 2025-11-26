@@ -27,5 +27,11 @@ public class Grille {
     public boolean inLimites(int x, int y) {
         return x >= 0 && x < largeur && y >= 0 && y < hauteur;
     }
+    public boolean isObstacle(int x, int y) {
+        if (!inLimites(x, y)) {
+            return true;
+        }
+        return murs[x][y];
+    }
     
 }
