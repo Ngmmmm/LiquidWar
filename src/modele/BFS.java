@@ -17,7 +17,7 @@ public final class BFS {
         int[][] distances = new int[largeur][hauteur];
 
 
-        
+        //Toutes les valeurs sont init a +∞
         for (int x = 0; x < largeur; x++) {
             for (int y = 0; y < hauteur; y++) {
                 distances[x][y] = Integer.MAX_VALUE;
@@ -28,11 +28,14 @@ public final class BFS {
 
         int targetX = equipe.getCible().x();
         int targetY = equipe.getCible().y();
-
+        //On init a 0 la cible de l'équipe
         if (grille.inLimites(targetX, targetY) && !grille.isObstacle(targetX, targetY)) {
             distances[targetX][targetY] = 0;
             queue.add(new Point(targetX, targetY));
         }
+        //puis les voisines (sauf obstacles) des cases qui ont des 0 se voient affecter 1
+        //puis on ré-itère : à l’étape i, les voisines (sauf obstacles) non encore marquées des cases
+        //de score i reçoivent le score i + 1
         while (!queue.isEmpty()) {
             Point current = queue.poll();
             int currentDist = distances[current.x()][current.y()];
@@ -51,6 +54,7 @@ public final class BFS {
                 }
             }
         }
+        //jusqu’à recouvrir toute la carte
         return new GrilleGradient(distances);
     }
 
