@@ -1,4 +1,4 @@
-
+package util;
 public record GameConfig(
     int largeur,
     int hauteur,
