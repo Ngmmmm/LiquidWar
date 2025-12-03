@@ -62,9 +62,10 @@ public class Grille {
         return isParticule(x, y) && getParticule(x, y).getEquipe() != p.getEquipe();
     }
 
-    public void AttaquerParticule(Particule attaquant, int x, int y) {
+    public void attaquerParticule(Particule attaquant, int x, int y) {
         Particule cible = getParticule(x, y);
-        if (cible == null) return;
+        if (cible == null)
+            return;
 
         float degats = config.degatsAttaque();
         float pris = Math.min(cible.getEnergie(), degats);
@@ -84,7 +85,7 @@ public class Grille {
         }
     }
 
-    public void TransfererEnergie(Particule donneur, int x, int y) {
+    public void transfererEnergie(Particule donneur, int x, int y) {
         Particule receveur = getParticule(x, y);
         float qte = Math.min(donneur.getEnergie(), config.transfertEnergie());
         donneur.removeEnergie(qte);
