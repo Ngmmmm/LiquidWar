@@ -45,6 +45,12 @@ public class Particule {
     }
     public void removeEnergie (float d) {
         energie -= d;
+        if (energie < 0) energie = 0;
+    }
+
+    public void deplacer(int nx , int ny){
+        this.setX(nx);
+        this.setY(ny);
     }
     
 }
