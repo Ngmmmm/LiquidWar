@@ -1,9 +1,9 @@
-package modele;
+package projet.cpoo5.modele;
 
-import java.util.List;
-import java.util.Map;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 public class Deplacement {

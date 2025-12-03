@@ -1,5 +1,8 @@
-package util;
+package projet.cpoo5.util;
+
+
 public record GameConfig(
+    
     int largeur,
     int hauteur,
     int particulesParEquipe,

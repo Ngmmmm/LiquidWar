@@ -1,7 +1,8 @@
-package modele;
+package projet.cpoo5.modele;
 
 import java.awt.Color;
-import util.Point;
+
+import projet.cpoo5.util.Point;
 
 
 public class Equipe {

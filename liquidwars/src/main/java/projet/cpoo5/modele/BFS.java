@@ -1,8 +1,8 @@
-package modele;
+package projet.cpoo5.modele;
 
 import java.util.LinkedList;
 import java.util.Queue;
-import util.Point;
+import projet.cpoo5.util.Point;
 
 public final class BFS {
 

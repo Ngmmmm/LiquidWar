@@ -1,4 +1,4 @@
-package modele;
+package projet.cpoo5.modele;
 
 public class Particule {
 

@@ -1,6 +1,6 @@
-package modele;
+package projet.cpoo5.modele;
 
-import util.GameConfig;
+import projet.cpoo5.util.GameConfig;
 
 public class Grille {
 
