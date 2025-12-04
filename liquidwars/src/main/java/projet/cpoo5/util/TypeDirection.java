@@ -1,4 +1,4 @@
-package projet.cpoo5.modele;
+package projet.cpoo5.util;
 
 
 public enum TypeDirection {

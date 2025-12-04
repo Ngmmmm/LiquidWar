@@ -11,8 +11,8 @@ public class GrilleGradient {
 
     public GrilleGradient(int[][] distance){
         this.distance = distance;
-        this.hauteur = distance.length;
-        this.largeur = (hauteur > 0) ? distance[0].length : 0;
+        this.largeur = distance.length;
+        this.hauteur = (largeur > 0) ? distance[0].length : 0;
     }
 
     public int getDistance(int x, int y) {

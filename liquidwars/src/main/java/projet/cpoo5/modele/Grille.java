@@ -108,4 +108,10 @@ public class Grille {
         p.deplacer(nx, ny);
     }
 
+    public void setWall(int x, int y, boolean isWall) {
+        if (inLimites(x, y)) {
+            this.murs[x][y] = isWall;
+        }
+    }
+
 }

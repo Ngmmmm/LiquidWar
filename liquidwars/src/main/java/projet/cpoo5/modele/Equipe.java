@@ -1,6 +1,6 @@
 package projet.cpoo5.modele;
 
-import java.awt.Color;
+import javafx.scene.paint.Color;
 
 import projet.cpoo5.util.Point;
 
