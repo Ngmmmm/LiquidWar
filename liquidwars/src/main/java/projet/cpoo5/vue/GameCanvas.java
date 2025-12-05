@@ -5,6 +5,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.ArcType;
+import projet.cpoo5.modele.Equipe;
 import projet.cpoo5.modele.Grille;
 import projet.cpoo5.modele.Particule;
 import projet.cpoo5.util.Point;
@@ -15,13 +17,19 @@ public class GameCanvas extends Canvas {
     private final WritableImage buffer;
     private final PixelWriter pixelWriter;
 
+    private final Equipe equipeRouge;
+    private final Equipe equipeBleue;
     // Variables pour la conversion Souris <-> Jeu
     private double ratio = 1.0;
     private double xOffset = 0;
     private double yOffset = 0;
 
-    public GameCanvas(Grille grille) {
+    private long tickCounter = 0;
+
+    public GameCanvas(Grille grille, Equipe rouge, Equipe bleu) {
         this.grille = grille;
+        this.equipeRouge = rouge;
+        this.equipeBleue = bleu;
         
         // Le buffer interne reste FIXE à la taille du jeu (320x240)
         this.buffer = new WritableImage(grille.getLargeur(), grille.getHauteur());
@@ -36,6 +44,8 @@ public class GameCanvas extends Canvas {
      * Méthode principale de dessin appelée par l'AnimationTimer
      */
     public void draw() {
+        // On avance le temps
+        tickCounter++;
         // 1. On dessine le jeu dans le petit buffer (Pixel Art)
         peindreBufferInterne();
 
@@ -84,6 +94,32 @@ public class GameCanvas extends Canvas {
         
         // Dessin centré
         gc.drawImage(buffer, xOffset, yOffset, wImage, hImage);
+
+        dessinerCible(gc, equipeRouge);
+        dessinerCible(gc, equipeBleue);
+    }
+    
+
+    private void dessinerCible(GraphicsContext gc, Equipe equipe) {
+        Point cible = equipe.getCible();
+        if (cible == null) return;
+
+        double cx = cible.x() * ratio + xOffset;
+        double cy = cible.y() * ratio + yOffset;
+        
+        double rayon = 5 * ratio; 
+        double epaisseur = 2 * ratio;
+ 
+        gc.setStroke(equipe.getCouleur().deriveColor(0, 1, 1, 0.5)); 
+        gc.setLineWidth(epaisseur);
+        gc.strokeOval(cx - rayon, cy - rayon, rayon * 2, rayon * 2);
+
+        Color couleurOpposee = getOppositeColor(equipe.getCouleur());
+        gc.setStroke(couleurOpposee);
+        
+        double angleRotation = (tickCounter * 5) % 360; 
+        
+        gc.strokeArc(cx - rayon, cy - rayon, rayon * 2, rayon * 2, angleRotation, 60, ArcType.OPEN);
     }
 
     /**
@@ -98,6 +134,16 @@ public class GameCanvas extends Canvas {
         gameY = Math.max(0, Math.min(gameY, grille.getHauteur() - 1));
         
         return new Point(gameX, gameY);
+    }
+
+    /**
+     * Calcule la couleur opposée (Négatif) sur le spectre.
+     */
+    private Color getOppositeColor(Color c) {
+        // On inverse les composantes RGB : 1.0 - valeur
+        // Rouge (1,0,0) devient Cyan (0,1,1)
+        // Bleu (0,0,1) devient Jaune (1,1,0)
+        return new Color(1.0 - c.getRed(), 1.0 - c.getGreen(), 1.0 - c.getBlue(), 1.0);
     }
 
     @Override

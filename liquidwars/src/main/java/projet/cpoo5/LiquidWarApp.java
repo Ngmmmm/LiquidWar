@@ -57,7 +57,7 @@ public class LiquidWarApp extends Application {
         BFS bfs = new BFS();
 
         // 3. VUE
-        GameCanvas canvas = new GameCanvas(grille);
+        GameCanvas canvas = new GameCanvas(grille, rouge, bleu);
         StackPane root = new StackPane(canvas); 
         Scene scene = new Scene(root, 800, 600); // Taille de départ de la fenêtre
 
