@@ -137,10 +137,10 @@ public class Grille {
         //On génère le bruit sur la petite grille
         for (int x = 0; x < wSmall; x++) {
             for (int y = 0; y < hSmall; y++) {
-                if (x == 0 || x == wSmall - 1 || y == 0 || y == hSmall - 1) {
+                if (x < 3 || x > wSmall - 4 || y < 3 || y > hSmall - 4) {
                     petiteGrille[x][y] = false;
                 } else {
-                    petiteGrille[x][y] = rand.nextDouble() < 0.44;
+                    petiteGrille[x][y] = rand.nextDouble() < 0.45;
                 }
             }
         }
