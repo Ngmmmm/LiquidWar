@@ -52,10 +52,7 @@ public class Grille {
     }
 
     public boolean isParticule(int x, int y) {
-        if (getParticule(x, y) == null)
-            return false;
-        else
-            return true;
+        return getParticule(x, y) != null;
     }
 
     public boolean isEnnemi(Particule p, int x, int y) {

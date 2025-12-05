@@ -1,5 +1,6 @@
 projet\cpoo5\LiquidWarApp$1.class
 projet\cpoo5\modele\BFS.class
+projet\cpoo5\controle\InputHandler.class
 projet\cpoo5\util\TypeDirection.class
 projet\cpoo5\modele\Grille.class
 projet\cpoo5\modele\Particule.class

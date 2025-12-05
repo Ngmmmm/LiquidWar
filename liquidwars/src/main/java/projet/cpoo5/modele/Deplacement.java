@@ -11,7 +11,8 @@ import projet.cpoo5.util.TypeDirection;
 public class Deplacement {
 
     private static final int[][] DIRECTIONS = {
-            { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 }
+        {1, 0}, {-1, 0}, {0, 1}, {0, -1},   // Cardinales
+        {1, 1}, {1, -1}, {-1, 1}, {-1, -1}  // Diagonales
     };
 
     public static void choisirDirection(Grille grille, GrilleGradient grilleGradient, Particule p) {
@@ -31,7 +32,7 @@ public class Deplacement {
         int minVoisin = Integer.MAX_VALUE;
         int[] dVoisins = new int[DIRECTIONS.length];
 
-        // 1. On récupère les distances des 4 voisins
+       
         for (int i = 0; i < DIRECTIONS.length; i++) {
             int nx = x + DIRECTIONS[i][0];
             int ny = y + DIRECTIONS[i][1];
@@ -42,20 +43,20 @@ public class Deplacement {
             if (dVoisins[i] < minVoisin) minVoisin = dVoisins[i];
         }
 
-        // 2. On classe les directions (Règles du sujet)
+        // On classe les directions 
         for (int i = 0; i < dVoisins.length; i++) {
             int d = dVoisins[i];
             if (d == Integer.MAX_VALUE) continue;
 
-            // Direction Principale (Minimale absolue)
+            // Direction Principale 
             if (d == minVoisin && minVoisin < d0) {
                 directions.get(TypeDirection.PRINCIPALE).add(i);
             } 
-            // Bonne Direction (Mieux qu'ici, mais pas la meilleure absolue)
+            // Bonne Direction 
             else if (d < d0) {
                 directions.get(TypeDirection.BONNE).add(i);
             } 
-            // Direction Acceptable (Pareil qu'ici, pour contourner)
+            // Direction Acceptable 
             else if (d == d0) {
                 directions.get(TypeDirection.ACCEPTABLE).add(i);
             }
@@ -87,7 +88,7 @@ public class Deplacement {
             return;
         }
 
-        // 7. Sinon, on ne fait rien (MAIS on tremble un peu pour éviter de figer le jeu)
+        // 7. Sinon on tremble un peu pour éviter de figer le jeu
         List<Integer> directionsAleatoires = new ArrayList<>();
         directionsAleatoires.add(0); directionsAleatoires.add(1);
         directionsAleatoires.add(2); directionsAleatoires.add(3);

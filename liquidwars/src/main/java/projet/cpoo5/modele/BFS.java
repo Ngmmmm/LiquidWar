@@ -2,12 +2,14 @@ package projet.cpoo5.modele;
 
 import java.util.LinkedList;
 import java.util.Queue;
+
 import projet.cpoo5.util.Point;
 
 public final class BFS {
 
-    private static final int [][] DIRECTIONS = {
-        {1, 0}, {-1, 0}, {0, 1}, {0, -1}
+    private static final int[][] DIRECTIONS = {
+        {1, 0}, {-1, 0}, {0, 1}, {0, -1},  
+        {1, 1}, {1, -1}, {-1, 1}, {-1, -1}  
     };
 
     public GrilleGradient calcul(Grille grille, Equipe equipe){
