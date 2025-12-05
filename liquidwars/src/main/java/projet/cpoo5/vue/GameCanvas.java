@@ -54,15 +54,33 @@ public class GameCanvas extends Canvas {
     }
 
     private void peindreBufferInterne() {
-        // On efface le buffer interne en blanc (ou couleur de fond)
         for (int x = 0; x < grille.getLargeur(); x++) {
             for (int y = 0; y < grille.getHauteur(); y++) {
                 if (grille.isObstacle(x, y)) {
                     pixelWriter.setColor(x, y, Color.BLACK);
                 } else {
                     Particule p = grille.getParticule(x, y);
-                    if (p != null) pixelWriter.setColor(x, y, p.getEquipe().getCouleur());
-                    else pixelWriter.setColor(x, y, Color.WHITE);
+                    if (p != null) {
+                        //CALCUL DE LA BRILLANCE
+                        // On récupère l'énergie
+                        double energie = p.getEnergie();
+                        double maxEnergie = 100.0; 
+                        
+                        // On calcule un facteur de luminosité entre 0.3 (sombre) et 1.0 (vif)
+                        double facteur = 0.3 + (0.7 * (energie / maxEnergie));
+                    
+                        facteur = Math.min(1.0, Math.max(0.3, facteur));
+
+                        // On prend la couleur de base de l'équipe
+                        Color base = p.getEquipe().getCouleur();
+                        
+                        Color finale = base.deriveColor(0, 1.0, facteur, 1.0);
+                        
+                        pixelWriter.setColor(x, y, finale);
+                    } 
+                    else {
+                        pixelWriter.setColor(x, y, Color.WHITE);
+                    }
                 }
             }
         }

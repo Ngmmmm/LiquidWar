@@ -5,6 +5,7 @@ public class Particule {
     private Equipe equipe;
     private int x , y;
     private float energie;
+    private static final float MAX_ENERGIE = 100.0f;
 
     public Particule(Equipe equipe, int x, int y, float energie) {
         this.equipe = equipe;
@@ -42,6 +43,7 @@ public class Particule {
     }
     public void addEnergie(float d) {
         energie += d;
+        if (this.energie > MAX_ENERGIE) this.energie = MAX_ENERGIE;
     }
     public void removeEnergie (float d) {
         energie -= d;
