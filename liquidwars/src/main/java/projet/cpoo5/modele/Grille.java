@@ -2,7 +2,6 @@ package projet.cpoo5.modele;
 
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.Random;
 
 import projet.cpoo5.util.GameConfig;
 import projet.cpoo5.util.Point;
@@ -121,29 +120,78 @@ public class Grille {
         }
     }
 
+    
     /**
-     * Génère des murs organiques avec un Automate Cellulaire.
+     * Génère des murs massifs en travaillant d'abord en basse résolution.
      */
     private void genererMursAleatoires() {
-        Random rand = new Random();
+        int echelle = 6; 
+
+        //On crée une grille temporaire minuscule
+        int wSmall = largeur / echelle;
+        int hSmall = hauteur / echelle;
+        boolean[][] petiteGrille = new boolean[wSmall][hSmall];
         
-        // 1. Initialisation aléatoire (Bruit)
-        // 45% de chances d'avoir un mur au départ
-        for (int x = 0; x < largeur; x++) {
-            for (int y = 0; y < hauteur; y++) {
-                // On garde les bords vides pour que les particules puissent circuler
-                if (x < 5 || x > largeur - 5 || y < 5 || y > hauteur - 5) {
-                    murs[x][y] = false;
+        java.util.Random rand = new java.util.Random();
+
+        //On génère le bruit sur la petite grille
+        for (int x = 0; x < wSmall; x++) {
+            for (int y = 0; y < hSmall; y++) {
+                if (x == 0 || x == wSmall - 1 || y == 0 || y == hSmall - 1) {
+                    petiteGrille[x][y] = false;
                 } else {
-                    murs[x][y] = rand.nextDouble() < 0.57;
+                    petiteGrille[x][y] = rand.nextDouble() < 0.44;
                 }
             }
         }
 
-        for (int i = 0; i < 10; i++) {
+        //On lisse la petite grille (pour avoir des formes cohérentes)
+        for (int i = 0; i < 5; i++) {
+            petiteGrille = lisserPetiteGrille(petiteGrille, wSmall, hSmall);
+        }
+
+        // On reporte le résultat sur la vraie grille
+        for (int x = 0; x < largeur; x++) {
+            for (int y = 0; y < hauteur; y++) {
+                // On va chercher la valeur correspondante dans la petite grille
+                int sx = Math.min(x / echelle, wSmall - 1);
+                int sy = Math.min(y / echelle, hSmall - 1);
+                murs[x][y] = petiteGrille[sx][sy];
+            }
+        }
+
+        for (int i = 0; i < 2; i++) {
             lisserCarte();
         }
+        // On supprime les petites îles isolées pour que tout soit connecté
         supprimerZonesIsolees();
+    }
+
+    private boolean[][] lisserPetiteGrille(boolean[][] input, int w, int h) {
+        boolean[][] output = new boolean[w][h];
+        for (int x = 0; x < w; x++) {
+            for (int y = 0; y < h; y++) {
+                int count = 0;
+                // Compter les voisins sur la petite grille
+                for (int i = -1; i <= 1; i++) {
+                    for (int j = -1; j <= 1; j++) {
+                        int nx = x + i;
+                        int ny = y + j;
+                        if (nx >= 0 && nx < w && ny >= 0 && ny < h) {
+                            if (i != 0 || j != 0) {
+                                if (input[nx][ny]) count++;
+                            }
+                        } else {
+                            count++; 
+                        }
+                    }
+                }
+                if (count > 4) output[x][y] = true;
+                else if (count < 4) output[x][y] = false;
+                else output[x][y] = input[x][y];
+            }
+        }
+        return output;
     }
 
     private void lisserCarte() {
