@@ -19,6 +19,9 @@ public class GameCanvas extends Canvas {
 
     private final Equipe equipeRouge;
     private final Equipe equipeBleue;
+
+    private int scoreRouge = 50;
+    private int scoreBleu = 50;
     // Variables pour la conversion Souris <-> Jeu
     private double ratio = 1.0;
     private double xOffset = 0;
@@ -53,6 +56,11 @@ public class GameCanvas extends Canvas {
         afficherSurEcran();
     }
 
+    public void setScores(int rouge, int bleu) {
+        this.scoreRouge = rouge;
+        this.scoreBleu = bleu;
+    }
+
     private void peindreBufferInterne() {
         for (int x = 0; x < grille.getLargeur(); x++) {
             for (int y = 0; y < grille.getHauteur(); y++) {
@@ -66,7 +74,7 @@ public class GameCanvas extends Canvas {
                         double energie = p.getEnergie();
                         double maxEnergie = 100.0; 
                         
-                        // On calcule un facteur de luminosité entre 0.3 (sombre) et 1.0 (vif)
+                        //facteur de luminosité entre 0.3 (sombre) et 1.0 (vif)
                         double facteur = 0.3 + (0.7 * (energie / maxEnergie));
                     
                         facteur = Math.min(1.0, Math.max(0.3, facteur));
@@ -107,7 +115,6 @@ public class GameCanvas extends Canvas {
         this.xOffset = (wEcran - wImage) / 2;
         this.yOffset = (hEcran - hImage) / 2;
 
-        // Mode "Pixel Art" net
         gc.setImageSmoothing(false);
         
         // Dessin centré
@@ -115,6 +122,8 @@ public class GameCanvas extends Canvas {
 
         dessinerCible(gc, equipeRouge);
         dessinerCible(gc, equipeBleue);
+
+        dessinerBarreScore(gc, wEcran, hEcran);
     }
     
 
@@ -155,12 +164,39 @@ public class GameCanvas extends Canvas {
     }
 
     /**
+     * Dessine une jauge verticale à droite de l'écran.
+     */
+    private void dessinerBarreScore(GraphicsContext gc, double w, double h) {
+        double total = scoreRouge + scoreBleu;
+        if (total == 0) return; 
+        double largeurBarre = 20; 
+        double marge = 10;      
+
+        // Calcul des hauteurs proportionnelles
+        double hauteurRouge = (scoreRouge / total) * h;
+        double hauteurBleu = (scoreBleu / total) * h;
+
+        // Position X de la barre (collée à droite)
+        double xBarre = w - largeurBarre - marge;
+
+        //Dessin de la partie ROUGE (en haut)
+        gc.setFill(equipeRouge.getCouleur());
+        gc.fillRect(xBarre, 0, largeurBarre, hauteurRouge);
+
+        //Dessin de la partie BLEUE (en bas)
+        gc.setFill(equipeBleue.getCouleur());
+        gc.fillRect(xBarre, hauteurRouge, largeurBarre, hauteurBleu);
+
+        //Petit contour blanc pour faire propre
+        gc.setStroke(Color.WHITE);
+        gc.setLineWidth(2);
+        gc.strokeRect(xBarre, 0, largeurBarre, h);
+    }
+
+    /**
      * Calcule la couleur opposée (Négatif) sur le spectre.
      */
     private Color getOppositeColor(Color c) {
-        // On inverse les composantes RGB : 1.0 - valeur
-        // Rouge (1,0,0) devient Cyan (0,1,1)
-        // Bleu (0,0,1) devient Jaune (1,1,0)
         return new Color(1.0 - c.getRed(), 1.0 - c.getGreen(), 1.0 - c.getBlue(), 1.0);
     }
 
