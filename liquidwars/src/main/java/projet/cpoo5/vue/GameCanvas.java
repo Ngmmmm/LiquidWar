@@ -120,8 +120,13 @@ public class GameCanvas extends Canvas {
         // Dessin centré
         gc.drawImage(buffer, xOffset, yOffset, wImage, hImage);
 
-        dessinerCible(gc, equipeRouge);
-        dessinerCible(gc, equipeBleue);
+        if (scoreRouge > 0) {
+            dessinerCible(gc, equipeRouge);
+        }
+        
+        if (scoreBleu > 0) {
+            dessinerCible(gc, equipeBleue);
+        }
 
         dessinerBarreScore(gc, wEcran, hEcran);
     }

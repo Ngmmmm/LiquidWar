@@ -71,7 +71,7 @@ public class LiquidWarApp extends Application {
         canvas.heightProperty().bind(sceneJeu.heightProperty());
 
         //CONTROLE JEU
-        new InputHandler(sceneJeu, canvas, rouge, bleu, config.largeur(), config.hauteur());
+        new InputHandler(sceneJeu, canvas, rouge, bleu, config.largeur(), config.hauteur(), grille);
 
         //BOUCLE DE JEU
         AnimationTimer timer = new AnimationTimer() {
