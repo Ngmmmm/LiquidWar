@@ -3,6 +3,7 @@ projet\cpoo5\modele\BFS.class
 projet\cpoo5\controle\InputHandler.class
 projet\cpoo5\util\TypeDirection.class
 projet\cpoo5\modele\Grille.class
+projet\cpoo5\vue\FinPartieVue.class
 projet\cpoo5\controle\MenuController.class
 projet\cpoo5\modele\Particule.class
 projet\cpoo5\util\Point.class

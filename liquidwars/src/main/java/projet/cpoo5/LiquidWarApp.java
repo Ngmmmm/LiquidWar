@@ -12,7 +12,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import projet.cpoo5.controle.InputHandler;
-import projet.cpoo5.controle.MenuController; 
 import projet.cpoo5.modele.BFS;
 import projet.cpoo5.modele.Deplacement;
 import projet.cpoo5.modele.Equipe;
@@ -21,7 +20,9 @@ import projet.cpoo5.modele.GrilleGradient;
 import projet.cpoo5.modele.Particule;
 import projet.cpoo5.util.GameConfig;
 import projet.cpoo5.util.Point;
+import projet.cpoo5.vue.FinPartieVue;
 import projet.cpoo5.vue.GameCanvas;
+import projet.cpoo5.vue.MenuVue;
 
 public class LiquidWarApp extends Application {
 
@@ -31,7 +32,7 @@ public class LiquidWarApp extends Application {
     public void start(Stage stage) {
         this.primaryStage = stage;
         
-        MenuController menu = new MenuController(stage, this);
+        MenuVue menu = new MenuVue(stage, this);
         menu.afficher();
     }
 
@@ -40,25 +41,24 @@ public class LiquidWarApp extends Application {
      */
     public void lancerPartie(boolean modeSolo) {
         //INITIALISATION
-        GameConfig config = new GameConfig(320, 240, 500, 100, 0, 5, 2);
+        int wGrille = 320;
+        int hGrille = 240;
+        GameConfig config = new GameConfig(wGrille, hGrille, 500, 100, 0, 5, 2);
         Grille grille = new Grille(config);
         
-        Equipe rouge = new Equipe(Color.RED, new Point(50, 50));
-        Equipe bleu = new Equipe(Color.BLUE, new Point(200, 200));
+        int spawnRX = 50;
+        int spawnRY = hGrille / 2;
+        
+        int spawnBX = wGrille - 50;
+        int spawnBY = hGrille / 2;
 
-        Random rand = new Random();
-        // Spawn Rouge
-        for(int i=0; i<1000; i++) {
-            int rx = rand.nextInt(180); int ry = rand.nextInt(400);
-            if(grille.inLimites(rx, ry) && !grille.isObstacle(rx, ry) && grille.getParticule(rx, ry) == null) 
-                grille.setParticule(rx, ry, new Particule(rouge, rx, ry, 100));
-        }
-        // Spawn Bleu
-        for(int i=0; i<1000; i++) {
-            int bx = 160 + rand.nextInt(150); int by = rand.nextInt(240);
-            if(grille.inLimites(bx, by) && !grille.isObstacle(bx, by) && grille.getParticule(bx, by) == null) 
-                grille.setParticule(bx, by, new Particule(bleu, bx, by, 100));
-        }
+        // On place les cibles exactement au centre du spawn
+        Equipe rouge = new Equipe(Color.RED, new Point(spawnRX, spawnRY));
+        Equipe bleu = new Equipe(Color.BLUE, new Point(spawnBX, spawnBY));
+
+        // On fait apparaître les armées autour de ces points fixes
+        spawnerEquipeAutour(grille, rouge, spawnRX, spawnRY);
+        spawnerEquipeAutour(grille, bleu, spawnBX, spawnBY);
         
         BFS bfs = new BFS();
 
@@ -107,12 +107,42 @@ public class LiquidWarApp extends Application {
                 }
                 canvas.setScores(countR, countB);
                 canvas.draw();
+
+                if (countR == 0) {
+                    this.stop();
+                    root.getChildren().add(FinPartieVue.creer("LES BLEUS GAGNENT !", Color.BLUE, () -> LiquidWarApp.this.start(primaryStage)));
+                } 
+                else if (countB == 0) {
+                    this.stop();
+                    root.getChildren().add(FinPartieVue.creer("LES ROUGES GAGNENT !", Color.RED, () -> LiquidWarApp.this.start(primaryStage)));
+                }
             }
         };
         timer.start();
         
         // CHANGEMENT DE SCÈNE
         primaryStage.setScene(sceneJeu);
+    }
+
+
+
+    private void spawnerEquipeAutour(Grille grille, Equipe equipe, int cx, int cy) {
+        int particulesPlacees = 0;
+        int nombreTotal = 1000;
+        Random rand = new Random();
+
+        while (particulesPlacees < nombreTotal) {
+            double r = rand.nextDouble() * 35.0; 
+            double angle = rand.nextDouble() * 2 * Math.PI;
+
+            int px = (int) (cx + r * Math.cos(angle));
+            int py = (int) (cy + r * Math.sin(angle));
+
+            if (grille.inLimites(px, py) && grille.getParticule(px, py) == null) {
+                grille.setParticule(px, py, new Particule(equipe, px, py, 100));
+                particulesPlacees++;
+            }
+        }
     }
 
     public static void main(String[] args) { launch(); }

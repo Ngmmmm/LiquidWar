@@ -163,9 +163,38 @@ public class Grille {
         for (int i = 0; i < 2; i++) {
             lisserCarte();
         }
+
+
+        int spawnRougeX = 50;  
+        int spawnRougeY = hauteur / 2;
+        
+        int spawnBleuX = largeur - 50; 
+        int spawnBleuY = hauteur / 2;
+        nettoyerCercle(spawnRougeX, spawnRougeY, 45);
+        nettoyerCercle(spawnBleuX, spawnBleuY, 45);
         // On supprime les petites îles isolées pour que tout soit connecté
         supprimerZonesIsolees();
+    
     }
+
+    /**
+     * Force une zone à devenir vide (supprime les murs).
+     */
+    private void nettoyerCercle(int cx, int cy, int rayon) {
+        int minX = Math.max(0, cx - rayon);
+        int maxX = Math.min(largeur, cx + rayon);
+        int minY = Math.max(0, cy - rayon);
+        int maxY = Math.min(hauteur, cy + rayon);
+
+        for (int x = minX; x < maxX; x++) {
+            for (int y = minY; y < maxY; y++) {
+                if (Math.pow(x - cx, 2) + Math.pow(y - cy, 2) <= rayon * rayon) {
+                    murs[x][y] = false;
+                }
+            }
+        }
+    }
+
 
     private boolean[][] lisserPetiteGrille(boolean[][] input, int w, int h) {
         boolean[][] output = new boolean[w][h];

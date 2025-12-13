@@ -1,4 +1,4 @@
-package projet.cpoo5.controle;
+package projet.cpoo5.vue;
 
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -11,12 +11,12 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import projet.cpoo5.LiquidWarApp;
 
-public class MenuController {
+public class MenuVue {
 
     private final Stage stage;
     private final LiquidWarApp app; 
 
-    public MenuController(Stage stage, LiquidWarApp app) {
+    public MenuVue(Stage stage, LiquidWarApp app) {
         this.stage = stage;
         this.app = app;
     }
@@ -28,7 +28,7 @@ public class MenuController {
         titre.setTextFill(Color.DARKBLUE);
 
         //Boutons
-        Button btnMulti = creerBouton("Multijoueur Local");
+        Button btnMulti = creerBouton("1v1 MultiLocal");
         btnMulti.setOnAction(e -> {
             app.lancerPartie(false); 
         });
@@ -47,7 +47,7 @@ public class MenuController {
         //Affichage
         Scene scene = new Scene(layout, 800, 600);
         stage.setScene(scene);
-        stage.setTitle("Liquid War - Menu");
+        stage.setTitle("Liquid War");
         stage.show();
     }
 
