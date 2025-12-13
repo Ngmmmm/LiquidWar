@@ -1,5 +1,7 @@
 package projet.cpoo5.vue;
 
+import java.util.List;
+
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.PixelWriter;
@@ -17,11 +19,9 @@ public class GameCanvas extends Canvas {
     private final WritableImage buffer;
     private final PixelWriter pixelWriter;
 
-    private final Equipe equipeRouge;
-    private final Equipe equipeBleue;
+    private final List<Equipe> equipes;
 
-    private int scoreRouge = 50;
-    private int scoreBleu = 50;
+    private int[] scores; 
     // Variables pour la conversion Souris <-> Jeu
     private double ratio = 1.0;
     private double xOffset = 0;
@@ -29,10 +29,10 @@ public class GameCanvas extends Canvas {
 
     private long tickCounter = 0;
 
-    public GameCanvas(Grille grille, Equipe rouge, Equipe bleu) {
+    public GameCanvas(Grille grille, List<Equipe> equipes) {
         this.grille = grille;
-        this.equipeRouge = rouge;
-        this.equipeBleue = bleu;
+        this.equipes = equipes;
+        
         
         // Le buffer interne reste FIXE à la taille du jeu (320x240)
         this.buffer = new WritableImage(grille.getLargeur(), grille.getHauteur());
@@ -41,6 +41,10 @@ public class GameCanvas extends Canvas {
         // Initialisation à une taille par défaut
         this.setWidth(800);
         this.setHeight(600);
+    }
+
+    public void setScores(int[] scores) {
+        this.scores = scores;
     }
 
     /**
@@ -54,11 +58,6 @@ public class GameCanvas extends Canvas {
 
         // 2. On affiche ce buffer en grand sur l'écran
         afficherSurEcran();
-    }
-
-    public void setScores(int rouge, int bleu) {
-        this.scoreRouge = rouge;
-        this.scoreBleu = bleu;
     }
 
     private void peindreBufferInterne() {
@@ -120,12 +119,10 @@ public class GameCanvas extends Canvas {
         // Dessin centré
         gc.drawImage(buffer, xOffset, yOffset, wImage, hImage);
 
-        if (scoreRouge > 0) {
-            dessinerCible(gc, equipeRouge);
-        }
-        
-        if (scoreBleu > 0) {
-            dessinerCible(gc, equipeBleue);
+        for (int i = 0; i < equipes.size(); i++) {
+            if (scores != null && i < scores.length && scores[i] > 0) {
+                dessinerCible(gc, equipes.get(i));
+            }
         }
 
         dessinerBarreScore(gc, wEcran, hEcran);
@@ -172,25 +169,21 @@ public class GameCanvas extends Canvas {
      * Dessine une jauge verticale à droite de l'écran.
      */
     private void dessinerBarreScore(GraphicsContext gc, double w, double h) {
-        double total = scoreRouge + scoreBleu;
-        if (total == 0) return; 
-        double largeurBarre = 20; 
-        double marge = 10;      
+        if (scores == null) return;
+        double total = 0;
+        for (int s : scores) total += s;
+        if (total == 0) return;
 
-        // Calcul des hauteurs proportionnelles
-        double hauteurRouge = (scoreRouge / total) * h;
-        double hauteurBleu = (scoreBleu / total) * h;
+        double largeurBarre = 20;
+        double xBarre = w - largeurBarre - 10;
+        double yCourant = 0;
 
-        // Position X de la barre (collée à droite)
-        double xBarre = w - largeurBarre - marge;
-
-        //Dessin de la partie ROUGE (en haut)
-        gc.setFill(equipeRouge.getCouleur());
-        gc.fillRect(xBarre, 0, largeurBarre, hauteurRouge);
-
-        //Dessin de la partie BLEUE (en bas)
-        gc.setFill(equipeBleue.getCouleur());
-        gc.fillRect(xBarre, hauteurRouge, largeurBarre, hauteurBleu);
+        for (int i = 0; i < equipes.size(); i++) {
+            double hauteur = (scores[i] / total) * h;
+            gc.setFill(equipes.get(i).getCouleur());
+            gc.fillRect(xBarre, yCourant, largeurBarre, hauteur);
+            yCourant += hauteur;
+        }
 
         //Petit contour blanc pour faire propre
         gc.setStroke(Color.WHITE);

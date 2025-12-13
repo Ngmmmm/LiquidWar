@@ -165,13 +165,21 @@ public class Grille {
         }
 
 
-        int spawnRougeX = 50;  
-        int spawnRougeY = hauteur / 2;
+        int spawnRougeX = 40;  
+        int spawnRougeY = 40;
         
-        int spawnBleuX = largeur - 50; 
-        int spawnBleuY = hauteur / 2;
+        int spawnBleuX = largeur-40; 
+        int spawnBleuY = 40;
+
+        int spawnJauneX = 40;  
+        int spawnJauneY = hauteur-40;
+
+        int spawnVertX = largeur-40;  
+        int spawnVertY = hauteur-40;
         nettoyerCercle(spawnRougeX, spawnRougeY, 45);
         nettoyerCercle(spawnBleuX, spawnBleuY, 45);
+        nettoyerCercle(spawnJauneX, spawnJauneY, 45);
+        nettoyerCercle(spawnVertX, spawnVertY, 45);
         // On supprime les petites îles isolées pour que tout soit connecté
         supprimerZonesIsolees();
     

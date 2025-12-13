@@ -12,6 +12,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import projet.cpoo5.controle.InputHandler;
+import projet.cpoo5.controle.bot.Bot;
 import projet.cpoo5.modele.BFS;
 import projet.cpoo5.modele.Deplacement;
 import projet.cpoo5.modele.Equipe;
@@ -45,33 +46,55 @@ public class LiquidWarApp extends Application {
         int hGrille = 240;
         GameConfig config = new GameConfig(wGrille, hGrille, 500, 100, 0, 5, 2);
         Grille grille = new Grille(config);
-        
-        int spawnRX = 50;
-        int spawnRY = hGrille / 2;
-        
-        int spawnBX = wGrille - 50;
-        int spawnBY = hGrille / 2;
 
-        // On place les cibles exactement au centre du spawn
-        Equipe rouge = new Equipe(Color.RED, new Point(spawnRX, spawnRY));
-        Equipe bleu = new Equipe(Color.BLUE, new Point(spawnBX, spawnBY));
+        List<Equipe> equipes = new ArrayList<>();
+        List<Bot> bots = new ArrayList<>();
+        
+        if (modeSolo) {
+            // MODE 4 JOUEURS 
+            Equipe rouge = new Equipe("ROUGE",Color.RED, new Point(40, 40));
+            equipes.add(rouge);
 
-        // On fait apparaître les armées autour de ces points fixes
-        spawnerEquipeAutour(grille, rouge, spawnRX, spawnRY);
-        spawnerEquipeAutour(grille, bleu, spawnBX, spawnBY);
+            Equipe bleu = new Equipe("BLEU",Color.BLUE, new Point(wGrille - 40, 40));
+            equipes.add(bleu);
+            //!ICI A MODIFIER POUR AJNOUTER LES BONS BOTS PLUS TARD
+            //bots.add(new Bot(bleu, grille));
+
+            Equipe vert = new Equipe("VERT",Color.LIME, new Point(wGrille - 40, hGrille - 40));
+            equipes.add(vert);
+            //!ICI A MODIFIER POUR AJNOUTER LES BONS BOTS PLUS TARD
+            //bots.add(new Bot(vert, grille));
+
+            Equipe jaune = new Equipe("JAUNE",Color.YELLOW, new Point(40, hGrille - 40));
+            equipes.add(jaune);
+            //!ICI A MODIFIER POUR AJNOUTER LES BONS BOTS PLUS TARD
+            //bots.add(new Bot(jaune, grille));
+
+        } else {
+            // MODE CLASSIQUE 2 JOUEURS 
+            Equipe rouge = new Equipe("ROUGE",Color.RED, new Point(40, 40));
+            Equipe bleu = new Equipe("BLEU",Color.BLUE, new Point(wGrille - 40, hGrille - 40));
+            equipes.add(rouge);
+            equipes.add(bleu);
+        }
+
+        // SPAWN DES PARTICULES
+        for (Equipe e : equipes) {
+            spawnerEquipeAutour(grille, e, e.getCible().x(), e.getCible().y());
+        }
         
         BFS bfs = new BFS();
 
         //VUE JEU
-        GameCanvas canvas = new GameCanvas(grille, rouge, bleu);
+        GameCanvas canvas = new GameCanvas(grille, equipes);
         StackPane root = new StackPane(canvas); 
         Scene sceneJeu = new Scene(root, 800, 600); 
 
         canvas.widthProperty().bind(sceneJeu.widthProperty());
         canvas.heightProperty().bind(sceneJeu.heightProperty());
 
-        //CONTROLE JEU
-        new InputHandler(sceneJeu, canvas, rouge, bleu, config.largeur(), config.hauteur(), grille);
+        Equipe joueur2 = (modeSolo) ? null : equipes.get(1);
+        new InputHandler(sceneJeu, canvas, equipes.get(0), joueur2,config.largeur(),config.hauteur(), grille);
 
         //BOUCLE DE JEU
         AnimationTimer timer = new AnimationTimer() {
@@ -79,20 +102,24 @@ public class LiquidWarApp extends Application {
             public void handle(long now) {
                 if (!primaryStage.isShowing()) this.stop();
 
-                rouge.setGrilleGradient(bfs.calcul(grille, rouge));
-                bleu.setGrilleGradient(bfs.calcul(grille, bleu));
+                for (Bot bot : bots) {
+                    bot.update(); 
+                }
+                //CALCUL BFS (Pour toutes les équipes)
+                for (Equipe e : equipes) {
+                    e.setGrilleGradient(bfs.calcul(grille, e));
+                }
                 
-                int countR = 0;
-                int countB = 0;
-
+                int[] counts = new int[equipes.size()];
                 List<Particule> aDeplacer = new ArrayList<>();
+
                 for(int x=0; x<grille.getLargeur(); x++) {
                     for(int y=0; y<grille.getHauteur(); y++) {
                         Particule p = grille.getParticule(x, y);
                         if (p != null) {
                             aDeplacer.add(p);
-                            if (p.getEquipe() == rouge) countR++;
-                            else if (p.getEquipe() == bleu) countB++;
+                            int index = equipes.indexOf(p.getEquipe());
+                            if (index != -1) counts[index]++;
                         }
                     }
                 }
@@ -105,16 +132,22 @@ public class LiquidWarApp extends Application {
                         Deplacement.choisirDirection(grille, gradient, p);
                     }
                 }
-                canvas.setScores(countR, countB);
+                canvas.setScores(counts);
                 canvas.draw();
 
-                if (countR == 0) {
+                int vivants = 0;
+                int gagnantIndex = -1;
+                for (int i=0; i<counts.length; i++) {
+                    if (counts[i] > 0) {
+                        vivants++;
+                        gagnantIndex = i;
+                    }
+                }
+
+                if (vivants <= 1 && aDeplacer.size() > 0) {
                     this.stop();
-                    root.getChildren().add(FinPartieVue.creer("LES BLEUS GAGNENT !", Color.BLUE, () -> LiquidWarApp.this.start(primaryStage)));
-                } 
-                else if (countB == 0) {
-                    this.stop();
-                    root.getChildren().add(FinPartieVue.creer("LES ROUGES GAGNENT !", Color.RED, () -> LiquidWarApp.this.start(primaryStage)));
+                    String msg = "VICTOIRE DES " + equipes.get(gagnantIndex).getNom();
+                    root.getChildren().add(FinPartieVue.creer(msg, equipes.get(gagnantIndex).getCouleur(), () -> LiquidWarApp.this.start(primaryStage)));
                 }
             }
         };

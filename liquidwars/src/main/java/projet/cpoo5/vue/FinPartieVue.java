@@ -31,12 +31,11 @@ public class FinPartieVue {
         lblVictoire.setTextFill(couleur);
         lblVictoire.setStyle("-fx-effect: dropshadow( one-pass-box , white , 0, 0.0 , 0 , 1 );");
 
-        //Bouton Retour
+        // Bouton Retour
         Button btnMenu = new Button("Retour au Menu");
         btnMenu.setFont(Font.font("Arial", 20));
         btnMenu.setMinWidth(200);
         
-        //On branche l'action reçue en paramètre sur le bouton
         btnMenu.setOnAction(e -> actionRetourMenu.run());
 
         panneau.getChildren().addAll(lblVictoire, btnMenu);

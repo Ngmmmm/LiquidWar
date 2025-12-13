@@ -34,7 +34,7 @@ public class MenuVue {
         });
 
         Button btnSolo = creerBouton("Solo vs Bot");
-        btnSolo.setOnAction(e -> System.out.println("Mode bot non implémenté"));
+        btnSolo.setOnAction(e -> app.lancerPartie(true));
 
         Button btnQuitter = creerBouton("Quitter");
         btnQuitter.setOnAction(e -> System.exit(0));

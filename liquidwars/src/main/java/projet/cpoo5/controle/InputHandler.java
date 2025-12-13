@@ -62,7 +62,9 @@ public class InputHandler {
         if (event.getCode() == KeyCode.ESCAPE) {
             System.exit(0);
         }
-        
+        if (joueur2 == null) {
+            return;
+        }
         Point p = joueur2.getCible();
         int nx = p.x(); 
         int ny = p.y(); 
