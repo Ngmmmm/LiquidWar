@@ -1,25 +1,29 @@
 package projet.cpoo5.modele;
 
-import java.awt.Color;
-
+import javafx.scene.paint.Color;
 import projet.cpoo5.util.Point;
 
 
-public class Equipe {
+public class Equipe implements IntEquipe {
 
     private final Color couleur;
     private int score;
+    private final String nom;
 
     private volatile Point cible;
 
     private volatile GrilleGradient grilleGradient;
 
-    public Equipe(Color couleur, Point cible) {
+    public Equipe(String nom,Color couleur, Point cible) {
         this.couleur = couleur;
         this.score = 0;
         this.cible = cible;
+        this.nom = nom;
     }
 
+    public String getNom() {
+        return nom;
+    }
     public Color getCouleur() {
         return couleur;
     }
