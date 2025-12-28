@@ -1,6 +1,6 @@
 package projet.cpoo5.modele;
 
-public class Particule {
+public class Particule implements IntParticule {
 
     private Equipe equipe;
     private int x , y;

@@ -4,7 +4,7 @@ import javafx.scene.paint.Color;
 import projet.cpoo5.util.Point;
 
 
-public class Equipe {
+public class Equipe implements IntEquipe {
 
     private final Color couleur;
     private int score;

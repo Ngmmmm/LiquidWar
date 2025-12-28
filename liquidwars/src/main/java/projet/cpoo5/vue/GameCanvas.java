@@ -8,18 +8,18 @@ import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.ArcType;
-import projet.cpoo5.modele.Equipe;
-import projet.cpoo5.modele.Grille;
-import projet.cpoo5.modele.Particule;
+import projet.cpoo5.modele.IntEquipe;
+import projet.cpoo5.modele.IntGrille;
+import projet.cpoo5.modele.IntParticule;
 import projet.cpoo5.util.Point;
 
 public class GameCanvas extends Canvas {
 
-    private final Grille grille;
+    private final IntGrille grille;
     private final WritableImage buffer;
     private final PixelWriter pixelWriter;
 
-    private final List<Equipe> equipes;
+    private final List<IntEquipe> equipes;
 
     private int[] scores; 
     // Variables pour la conversion Souris <-> Jeu
@@ -29,9 +29,9 @@ public class GameCanvas extends Canvas {
 
     private long tickCounter = 0;
 
-    public GameCanvas(Grille grille, List<Equipe> equipes) {
+    public GameCanvas(IntGrille grille, List<? extends IntEquipe> equipes) {
         this.grille = grille;
-        this.equipes = equipes;
+        this.equipes = new java.util.ArrayList<>(equipes);
         
         
         // Le buffer interne reste FIXE à la taille du jeu (320x240)
@@ -66,7 +66,7 @@ public class GameCanvas extends Canvas {
                 if (grille.isObstacle(x, y)) {
                     pixelWriter.setColor(x, y, Color.BLACK);
                 } else {
-                    Particule p = grille.getParticule(x, y);
+                    IntParticule p = grille.getParticule(x, y);
                     if (p != null) {
                         //CALCUL DE LA BRILLANCE
                         // On récupère l'énergie
@@ -129,7 +129,7 @@ public class GameCanvas extends Canvas {
     }
     
 
-    private void dessinerCible(GraphicsContext gc, Equipe equipe) {
+    private void dessinerCible(GraphicsContext gc, IntEquipe equipe) {
         Point cible = equipe.getCible();
         if (cible == null) return;
 
