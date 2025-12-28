@@ -13,6 +13,9 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import projet.cpoo5.controle.InputHandler;
 import projet.cpoo5.controle.bot.Bot;
+import projet.cpoo5.controle.bot.BotDifficile;
+import projet.cpoo5.controle.bot.BotFacile;
+import projet.cpoo5.controle.bot.BotMedium;
 import projet.cpoo5.modele.BFS;
 import projet.cpoo5.modele.Deplacement;
 import projet.cpoo5.modele.Equipe;
@@ -49,26 +52,39 @@ public class LiquidWarApp extends Application {
 
         List<Equipe> equipes = new ArrayList<>();
         List<Bot> bots = new ArrayList<>();
-        
+        List<Equipe> adversairesB = new ArrayList<>();
+        List<Equipe> adversairesJ = new ArrayList<>();
+        List<Equipe> adversairesV = new ArrayList<>();
+
         if (modeSolo) {
             // MODE 4 JOUEURS 
             Equipe rouge = new Equipe("ROUGE",Color.RED, new Point(40, 40));
+
             equipes.add(rouge);
+            adversairesB.add(rouge);
+            adversairesV.add(rouge);
+            adversairesJ.add(rouge);
 
             Equipe bleu = new Equipe("BLEU",Color.BLUE, new Point(wGrille - 40, 40));
             equipes.add(bleu);
-            //!ICI A MODIFIER POUR AJNOUTER LES BONS BOTS PLUS TARD
-            //bots.add(new Bot(bleu, grille));
+            adversairesV.add(bleu);
+            adversairesJ.add(bleu);
+           
 
             Equipe vert = new Equipe("VERT",Color.LIME, new Point(wGrille - 40, hGrille - 40));
             equipes.add(vert);
-            //!ICI A MODIFIER POUR AJNOUTER LES BONS BOTS PLUS TARD
-            //bots.add(new Bot(vert, grille));
+            adversairesB.add(vert);
+            adversairesJ.add(vert);
+      
 
             Equipe jaune = new Equipe("JAUNE",Color.YELLOW, new Point(40, hGrille - 40));
             equipes.add(jaune);
-            //!ICI A MODIFIER POUR AJNOUTER LES BONS BOTS PLUS TARD
-            //bots.add(new Bot(jaune, grille));
+            adversairesB.add(jaune);
+            adversairesV.add(jaune);
+            
+             bots.add(new BotDifficile(bleu, grille, adversairesB));
+             bots.add(new BotFacile(vert, grille, adversairesV));
+             bots.add(new BotMedium(jaune, grille, adversairesJ));
 
         } else {
             // MODE CLASSIQUE 2 JOUEURS 

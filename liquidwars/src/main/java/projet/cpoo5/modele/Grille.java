@@ -6,7 +6,7 @@ import java.util.Queue;
 import projet.cpoo5.util.GameConfig;
 import projet.cpoo5.util.Point;
 
-public class Grille {
+public class Grille implements IntGrille {
 
     private final int largeur;
     private final int hauteur;
