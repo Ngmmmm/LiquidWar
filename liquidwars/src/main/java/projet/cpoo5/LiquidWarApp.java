@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -31,6 +35,7 @@ import projet.cpoo5.vue.MenuVue;
 public class LiquidWarApp extends Application {
 
     private Stage primaryStage; 
+    private final ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
     @Override
     public void start(Stage stage) {
@@ -38,6 +43,12 @@ public class LiquidWarApp extends Application {
         
         MenuVue menu = new MenuVue(stage, this);
         menu.afficher();
+    }
+
+    @Override
+    public void stop() throws Exception {
+        executor.shutdown();
+        super.stop();
     }
 
     /**
@@ -118,14 +129,35 @@ public class LiquidWarApp extends Application {
             public void handle(long now) {
                 if (!primaryStage.isShowing()) this.stop();
 
+                List<Future<?>> botsFutures = new ArrayList<>();
                 for (Bot bot : bots) {
-                    bot.update(); 
+                    Future<?> f = executor.submit(() -> bot.update());
+                    botsFutures.add(f);
                 }
+                for (Future<?> f : botsFutures) {
+                    try {
+                        f.get();
+                    } catch (InterruptedException | ExecutionException e) {
+                        e.printStackTrace();
+                    }
+                }
+
                 //CALCUL BFS (Pour toutes les équipes)
+                List<Future<GrilleGradient>> resultatsFuturs = new ArrayList<>();
+
                 for (Equipe e : equipes) {
-                    e.setGrilleGradient(bfs.calcul(grille, e));
+                    Future<GrilleGradient> f = executor.submit(() -> bfs.calcul(grille, e));
+                    resultatsFuturs.add(f);
                 }
-                
+                for (int i = 0; i < equipes.size(); i++) {
+                    try {
+                        GrilleGradient resultat = resultatsFuturs.get(i).get();
+                        equipes.get(i).setGrilleGradient(resultat);
+                    } catch (InterruptedException | ExecutionException e) {
+                        e.printStackTrace();
+                    }
+                }
+
                 int[] counts = new int[equipes.size()];
                 List<Particule> aDeplacer = new ArrayList<>();
 
