@@ -1,6 +1,10 @@
 package projet.cpoo5.util;
 
 
+/**
+ * Record stockant la configuration statique du jeu.
+ * Contient les paramètres d'équilibrage (dimensions, énergie, dégâts).
+ */
 public record GameConfig(
     
     int largeur,

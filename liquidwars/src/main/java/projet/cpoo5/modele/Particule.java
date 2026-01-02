@@ -1,5 +1,10 @@
 package projet.cpoo5.modele;
 
+
+/**
+ * Représente une entité unitaire du jeu (un "blob").
+ * Possède une position, une quantité d'énergie et appartient à une équipe.
+ */
 public class Particule implements IntParticule {
 
     private Equipe equipe;
@@ -14,6 +19,7 @@ public class Particule implements IntParticule {
         this.energie = energie;
     }
 
+    @Override
     public Equipe getEquipe() {
         return equipe;
     }
@@ -22,6 +28,7 @@ public class Particule implements IntParticule {
         this.equipe = equipe;
     }
 
+    @Override
     public int getX() {
         return x;
     }
@@ -30,6 +37,7 @@ public class Particule implements IntParticule {
         this.x = x;
     }
 
+    @Override
     public int getY() {
         return y;
     }
@@ -38,6 +46,7 @@ public class Particule implements IntParticule {
         this.y = y;
     }
 
+    @Override
     public float getEnergie() {
         return energie;
     }

@@ -6,6 +6,12 @@ import java.util.Queue;
 import projet.cpoo5.util.GameConfig;
 import projet.cpoo5.util.Point;
 
+
+/**
+ * Représente le plateau de jeu .
+ * Gère les particules, les obstacles (murs) et leurs interactions.
+ * Contient également la logique de génération procédurale de la carte.
+ */
 public class Grille implements IntGrille {
 
     private final int largeur;
@@ -26,10 +32,12 @@ public class Grille implements IntGrille {
         genererMursAleatoires();
     }
 
+    @Override
     public int getLargeur() {
         return largeur;
     }
 
+    @Override
     public int getHauteur() {
         return hauteur;
     }
@@ -40,16 +48,19 @@ public class Grille implements IntGrille {
         particules[x][y] = p;
     }
 
+    @Override
     public Particule getParticule(int x, int y) {
         if (!inLimites(x, y))
             return null;
         return particules[x][y];
     }
 
+    @Override
     public boolean inLimites(int x, int y) {
         return x >= 0 && x < largeur && y >= 0 && y < hauteur;
     }
 
+    @Override
     public boolean isObstacle(int x, int y) {
         if (!inLimites(x, y)) {
             return true;
@@ -61,10 +72,17 @@ public class Grille implements IntGrille {
         return getParticule(x, y) != null;
     }
 
+    /**
+     * Vérifie si la particule en (x,y) est ennemie par rapport à p.
+     */
     public boolean isEnnemi(Particule p, int x, int y) {
         return isParticule(x, y) && getParticule(x, y).getEquipe() != p.getEquipe();
     }
 
+    /**
+     * Gère l'attaque d'une particule sur une autre.
+     * Si la cible n'a plus d'énergie, elle change d'équipe.
+     */
     public void attaquerParticule(Particule attaquant, int x, int y) {
         Particule cible = getParticule(x, y);
         if (cible == null)
@@ -84,6 +102,9 @@ public class Grille implements IntGrille {
         }
     }
 
+    /**
+     * Transfère de l'énergie d'une particule à un allié.
+     */
     public void transfererEnergie(Particule donneur, int x, int y) {
         Particule receveur = getParticule(x, y);
         float seuilMax = 100.0f;
@@ -98,6 +119,9 @@ public class Grille implements IntGrille {
         receveur.addEnergie(qte);
     }
 
+    /**
+     * Déplace une particule d'une case à une autre (si vide et sans obstacle).
+     */
     public void deplacerParticule(Particule p, int nx, int ny) {
         int x = p.getX();
         int y = p.getY();

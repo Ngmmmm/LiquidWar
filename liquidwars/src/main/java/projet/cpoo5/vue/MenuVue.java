@@ -11,6 +11,11 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 import projet.cpoo5.LiquidWarApp;
 
+
+/**
+ * Gère l'affichage du menu principal.
+ * Propose les options de jeu (1v1, Solo vs Bot, Quitter) et délègue les actions à LiquidWarApp.
+ */
 public class MenuVue {
 
     private final Stage stage;

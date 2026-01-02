@@ -4,6 +4,11 @@ import javafx.scene.paint.Color;
 import projet.cpoo5.util.Point;
 
 
+/**
+ * Représente une équipe dans le jeu.
+ * Contient les informations de base (nom, couleur) ainsi que la cible actuelle
+ * et la grille de gradient associée (calculée par le BFS).
+ */
 public class Equipe implements IntEquipe {
 
     private final Color couleur;
@@ -21,9 +26,11 @@ public class Equipe implements IntEquipe {
         this.nom = nom;
     }
 
+    @Override
     public String getNom() {
         return nom;
     }
+    @Override
     public Color getCouleur() {
         return couleur;
     }
@@ -44,6 +51,7 @@ public class Equipe implements IntEquipe {
         this.cible = cible;
     }
 
+    @Override
     public Point getCible(){
         return this.cible;
     }

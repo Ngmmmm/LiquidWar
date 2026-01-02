@@ -13,6 +13,12 @@ import projet.cpoo5.modele.IntGrille;
 import projet.cpoo5.modele.IntParticule;
 import projet.cpoo5.util.Point;
 
+
+/**
+ * Composant graphique principal qui gère le dessin du jeu.
+ * Utilise un buffer d'image (WritableImage) pour le rendu performant des particules
+ * et le GraphicsContext pour l'UI (scores, cibles).
+ */
 public class GameCanvas extends Canvas {
 
     private final IntGrille grille;

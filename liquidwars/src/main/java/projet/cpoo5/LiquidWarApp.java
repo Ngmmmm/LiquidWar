@@ -32,11 +32,21 @@ import projet.cpoo5.vue.FinPartieVue;
 import projet.cpoo5.vue.GameCanvas;
 import projet.cpoo5.vue.MenuVue;
 
+
+/**
+ * Classe principale de l'application (Contrôleur global).
+ * Elle gère le cycle de vie de l'application JavaFX, l'initialisation du jeu,
+ * la boucle principale (AnimationTimer) et le multithreading.
+ */
 public class LiquidWarApp extends Application {
 
     private Stage primaryStage; 
     private final ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
+
+    /**
+     * Démarre l'interface graphique et affiche le menu principal.
+     */
     @Override
     public void start(Stage stage) {
         this.primaryStage = stage;
@@ -45,20 +55,25 @@ public class LiquidWarApp extends Application {
         menu.afficher();
     }
 
+    /**
+     * Arrête proprement le pool de threads lors de la fermeture de l'application.
+     */
     @Override
     public void stop() throws Exception {
         executor.shutdown();
         super.stop();
     }
 
-    /**
-     * Cette méthode est appelée par le MenuController quand on clique sur Jouer.
+   /**
+     * Initialise et lance une nouvelle partie (Solo ou Multijoueur).
+     * Configure la grille, les équipes, les bots et démarre la boucle de jeu.
+     * @param modeSolo Vrai pour jouer contre des bots, Faux pour le mode 1v1 local.
      */
     public void lancerPartie(boolean modeSolo) {
         //INITIALISATION
         int wGrille = 320;
         int hGrille = 240;
-        GameConfig config = new GameConfig(wGrille, hGrille, 500, 100, 0, 5, 2);
+        GameConfig config = new GameConfig(wGrille, hGrille, 1000, 100, 0, 5, 2);
         Grille grille = new Grille(config);
 
         List<Equipe> equipes = new ArrayList<>();
