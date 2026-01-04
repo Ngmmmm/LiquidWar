@@ -2,7 +2,7 @@ package projet.cpoo5.controle.bot;
 
 import projet.cpoo5.modele.*;
 import java.util.List;
-public class BotMedium extends Bot {
+public final class BotMedium extends Bot {
     private projet.cpoo5.util.Point goal = null;
     private int cooldown = 0;
 

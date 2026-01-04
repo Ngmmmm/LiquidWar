@@ -3,7 +3,7 @@ package projet.cpoo5.controle.bot;
 import projet.cpoo5.modele.*;
 
 
-public class BotFacile extends Bot {
+public final class BotFacile extends Bot {
     private static final int[][] DIR4 = {{1,0},{-1,0},{0,1},{0,-1}};
     public BotFacile(Equipe e, Grille g, java.util.List<Equipe> adv) { super(e,g,adv); }
 

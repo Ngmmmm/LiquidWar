@@ -2,7 +2,7 @@ package projet.cpoo5.controle.bot;
 
 import projet.cpoo5.modele.*;
 
-public class BotDifficile extends Bot {
+public  final class BotDifficile extends Bot {
     private int cooldown = 0;
     private projet.cpoo5.util.Point goal = null;
 
