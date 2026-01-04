@@ -14,7 +14,7 @@ import projet.cpoo5.util.TypeDirection;
  * Décide pour chaque particule si elle doit bouger, attaquer ou transférer de l'énergie
  * en fonction du gradient calculé par le BFS.
  */
-public class Deplacement {
+public final class Deplacement {
 
     private static final int[][] DIRECTIONS = {
         {1, 0}, {-1, 0}, {0, 1}, {0, -1},   // Cardinales

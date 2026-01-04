@@ -4,7 +4,7 @@ package projet.cpoo5.modele;
  * Conteneur immuable représentant la carte des distances (Flow Field).
  * Utilisé par les particules pour connaître la distance vers la cible depuis n'importe quelle case.
  */
-public class GrilleGradient {
+public final class GrilleGradient {
 
     private final int[][] distance;
 

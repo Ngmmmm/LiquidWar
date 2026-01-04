@@ -12,7 +12,7 @@ import projet.cpoo5.util.Point;
  * Gère les particules, les obstacles (murs) et leurs interactions.
  * Contient également la logique de génération procédurale de la carte.
  */
-public class Grille implements IntGrille {
+public final class Grille implements IntGrille {
 
     private final int largeur;
     private final int hauteur;

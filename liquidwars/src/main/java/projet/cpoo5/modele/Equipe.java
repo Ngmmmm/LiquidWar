@@ -9,7 +9,7 @@ import projet.cpoo5.util.Point;
  * Contient les informations de base (nom, couleur) ainsi que la cible actuelle
  * et la grille de gradient associée (calculée par le BFS).
  */
-public class Equipe implements IntEquipe {
+public final class Equipe implements IntEquipe {
 
     private final Color couleur;
     private int score;
