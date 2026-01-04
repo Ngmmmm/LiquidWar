@@ -19,7 +19,7 @@ import projet.cpoo5.util.Point;
  * Utilise un buffer d'image (WritableImage) pour le rendu performant des particules
  * et le GraphicsContext pour l'UI (scores, cibles).
  */
-public class GameCanvas extends Canvas {
+public final class GameCanvas extends Canvas {
 
     private final IntGrille grille;
     private final WritableImage buffer;

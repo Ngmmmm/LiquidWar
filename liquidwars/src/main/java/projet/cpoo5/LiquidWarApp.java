@@ -38,7 +38,7 @@ import projet.cpoo5.vue.MenuVue;
  * Elle gère le cycle de vie de l'application JavaFX, l'initialisation du jeu,
  * la boucle principale (AnimationTimer) et le multithreading.
  */
-public class LiquidWarApp extends Application {
+public final class LiquidWarApp extends Application {
 
     private Stage primaryStage; 
     private final ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());

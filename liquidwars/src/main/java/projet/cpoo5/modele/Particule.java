@@ -5,7 +5,7 @@ package projet.cpoo5.modele;
  * Représente une entité unitaire du jeu (un "blob").
  * Possède une position, une quantité d'énergie et appartient à une équipe.
  */
-public class Particule implements IntParticule {
+public final class Particule implements IntParticule {
 
     private Equipe equipe;
     private int x , y;

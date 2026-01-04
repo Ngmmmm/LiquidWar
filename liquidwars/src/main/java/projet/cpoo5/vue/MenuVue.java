@@ -16,7 +16,7 @@ import projet.cpoo5.LiquidWarApp;
  * Gère l'affichage du menu principal.
  * Propose les options de jeu (1v1, Solo vs Bot, Quitter) et délègue les actions à LiquidWarApp.
  */
-public class MenuVue {
+public final class MenuVue {
 
     private final Stage stage;
     private final LiquidWarApp app; 
