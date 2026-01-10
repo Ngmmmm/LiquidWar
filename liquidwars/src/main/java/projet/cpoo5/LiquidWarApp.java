@@ -31,6 +31,7 @@ import projet.cpoo5.util.Point;
 import projet.cpoo5.vue.FinPartieVue;
 import projet.cpoo5.vue.GameCanvas;
 import projet.cpoo5.vue.MenuVue;
+import projet.cpoo5.controle.bot.FabriqueBot;
 
 
 /**
@@ -108,9 +109,9 @@ public final class LiquidWarApp extends Application {
             adversairesB.add(jaune);
             adversairesV.add(jaune);
             
-             bots.add(new BotDifficile(bleu, grille, adversairesB));
-             bots.add(new BotFacile(vert, grille, adversairesV));
-             bots.add(new BotMedium(jaune, grille, adversairesJ));
+             bots.add(FabriqueBot.creerBot(FabriqueBot.NiveauBot.FACILE, bleu, grille, adversairesB));
+             bots.add(FabriqueBot.creerBot(FabriqueBot.NiveauBot.MOYEN, vert, grille, adversairesV));
+             bots.add(FabriqueBot.creerBot(FabriqueBot.NiveauBot.DIFFICILE, jaune, grille, adversairesJ));
 
         } else {
             // MODE CLASSIQUE 2 JOUEURS 
