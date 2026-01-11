@@ -11,7 +11,7 @@ import projet.cpoo5.util.Point;
  * Chaque type de bot (facile, moyen, difficile) hérite de cette classe
  * et implémente sa propre stratégie dans la méthode update().
  */
-public abstract class Bot {
+public sealed abstract class Bot permits BotFacile, BotMedium , BotDifficile {
 
     // L'équipe que ce bot contrôle
     protected final Equipe equipeControlee;
@@ -32,7 +32,7 @@ public abstract class Bot {
      * @param grilleJeu La grille de jeu
      * @param equipesAdverses La liste des équipes ennemies
      */
-    public Bot(Equipe equipeControlee, Grille grilleJeu, List<Equipe> equipesAdverses) {
+    protected Bot(Equipe equipeControlee, Grille grilleJeu, List<Equipe> equipesAdverses) {
         this.equipeControlee = equipeControlee;
         this.grilleJeu = grilleJeu;
         this.equipesAdverses = equipesAdverses;
