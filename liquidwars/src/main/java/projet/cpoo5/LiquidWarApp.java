@@ -4,10 +4,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -27,27 +33,66 @@ import projet.cpoo5.util.Point;
 import projet.cpoo5.vue.FinPartieVue;
 import projet.cpoo5.vue.GameCanvas;
 import projet.cpoo5.vue.MenuVue;
+import projet.cpoo5.controle.bot.FabriqueBot;
 
-public class LiquidWarApp extends Application {
+
+/**
+ * Classe principale de l'application (Contrôleur global).
+ * Elle gère le cycle de vie de l'application JavaFX, l'initialisation du jeu,
+ * la boucle principale (AnimationTimer) et le multithreading.
+ */
+public final class LiquidWarApp extends Application {
 
     private Stage primaryStage; 
+    private final ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
+
+    /**
+     * Démarre l'interface graphique et affiche le menu principal.
+     */
     @Override
     public void start(Stage stage) {
+
+        Thread.currentThread().setUncaughtExceptionHandler((thread, throwable) -> {
+            afficherErreurSimple(throwable);
+        });
         this.primaryStage = stage;
         
         MenuVue menu = new MenuVue(stage, this);
         menu.afficher();
     }
 
+    private void afficherErreurSimple(Throwable e) {
+        e.printStackTrace(); // On garde la trace dans la console pour toi
+        
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle("Erreur");
+        alert.setHeaderText("Une erreur est survenue");
+        // Affiche juste le message simple (ex: "NullPointerException")
+        alert.setContentText(e.toString()); 
+        
+        alert.showAndWait();
+    }
+
     /**
-     * Cette méthode est appelée par le MenuController quand on clique sur Jouer.
+     * Arrête proprement le pool de threads lors de la fermeture de l'application.
+     */
+    @Override
+    public void stop() throws Exception {
+        executor.shutdown();
+        super.stop();
+    }
+
+   /**
+     * Initialise et lance une nouvelle partie (Solo ou Multijoueur).
+     * Configure la grille, les équipes, les bots et démarre la boucle de jeu.
+     * @param modeSolo Vrai pour jouer contre des bots, Faux pour le mode 1v1 local.
      */
     public void lancerPartie(boolean modeSolo) {
         //INITIALISATION
         int wGrille = 320;
         int hGrille = 240;
-        GameConfig config = new GameConfig(wGrille, hGrille, 500, 100, 0, 5, 2);
+        GameConfig config = new GameConfig(wGrille, hGrille, 1000, 100, 0, 5, 2);
         Grille grille = new Grille(config);
 
         List<Equipe> equipes = new ArrayList<>();
@@ -82,9 +127,9 @@ public class LiquidWarApp extends Application {
             adversairesB.add(jaune);
             adversairesV.add(jaune);
             
-             bots.add(new BotDifficile(bleu, grille, adversairesB));
-             bots.add(new BotFacile(vert, grille, adversairesV));
-             bots.add(new BotMedium(jaune, grille, adversairesJ));
+             bots.add(FabriqueBot.creerBot(FabriqueBot.NiveauBot.FACILE, bleu, grille, adversairesB));
+             bots.add(FabriqueBot.creerBot(FabriqueBot.NiveauBot.MOYEN, vert, grille, adversairesV));
+             bots.add(FabriqueBot.creerBot(FabriqueBot.NiveauBot.DIFFICILE, jaune, grille, adversairesJ));
 
         } else {
             // MODE CLASSIQUE 2 JOUEURS 
@@ -118,14 +163,35 @@ public class LiquidWarApp extends Application {
             public void handle(long now) {
                 if (!primaryStage.isShowing()) this.stop();
 
+                List<Future<?>> botsFutures = new ArrayList<>();
                 for (Bot bot : bots) {
-                    bot.update(); 
+                    Future<?> f = executor.submit(() -> bot.update());
+                    botsFutures.add(f);
                 }
+                for (Future<?> f : botsFutures) {
+                    try {
+                        f.get();
+                    } catch (InterruptedException | ExecutionException e) {
+                        e.printStackTrace();
+                    }
+                }
+
                 //CALCUL BFS (Pour toutes les équipes)
+                List<Future<GrilleGradient>> resultatsFuturs = new ArrayList<>();
+
                 for (Equipe e : equipes) {
-                    e.setGrilleGradient(bfs.calcul(grille, e));
+                    Future<GrilleGradient> f = executor.submit(() -> bfs.calcul(grille, e));
+                    resultatsFuturs.add(f);
                 }
-                
+                for (int i = 0; i < equipes.size(); i++) {
+                    try {
+                        GrilleGradient resultat = resultatsFuturs.get(i).get();
+                        equipes.get(i).setGrilleGradient(resultat);
+                    } catch (InterruptedException | ExecutionException e) {
+                        e.printStackTrace();
+                    }
+                }
+
                 int[] counts = new int[equipes.size()];
                 List<Particule> aDeplacer = new ArrayList<>();
 

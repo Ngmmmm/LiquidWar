@@ -8,13 +8,27 @@ import java.util.Map;
 
 import projet.cpoo5.util.TypeDirection;
 
-public class Deplacement {
+
+/**
+ * Gère la logique de déplacement et d'interaction des particules.
+ * Décide pour chaque particule si elle doit bouger, attaquer ou transférer de l'énergie
+ * en fonction du gradient calculé par le BFS.
+ */
+public final class Deplacement {
 
     private static final int[][] DIRECTIONS = {
         {1, 0}, {-1, 0}, {0, 1}, {0, -1},   // Cardinales
         {1, 1}, {1, -1}, {-1, 1}, {-1, -1}  // Diagonales
     };
 
+    /**
+     * Choisit la meilleure action pour une particule.
+     * Priorise le mouvement vers les cases ayant une distance plus faible vers la cible.
+     * Si bloqué, tente d'attaquer les ennemis ou de transférer de l'énergie aux alliés.
+     * @param grille La grille de jeu (pour vérifier l'occupation des cases).
+     * @param grilleGradient La carte des distances pour l'équipe de la particule.
+     * @param p La particule à déplacer.
+     */
     public static void choisirDirection(Grille grille, GrilleGradient grilleGradient, Particule p) {
 
         // Préparation des listes pour classer les voisins

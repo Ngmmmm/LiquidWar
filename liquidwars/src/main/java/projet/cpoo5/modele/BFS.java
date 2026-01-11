@@ -5,6 +5,11 @@ import java.util.Queue;
 
 import projet.cpoo5.util.Point;
 
+
+/**
+ * Implémente l'algorithme de recherche en largeur (Breadth-First Search).
+ * Utilise cet algorithme pour générer une carte de distances pour une équipe donnée.
+ */
 public final class BFS {
 
     private static final int[][] DIRECTIONS = {
@@ -12,7 +17,14 @@ public final class BFS {
         {1, 1}, {1, -1}, {-1, 1}, {-1, -1}  
     };
 
-    public GrilleGradient calcul(Grille grille, Equipe equipe){
+    /**
+     * Calcule la grille de gradients pour une équipe.
+     * Chaque case de la grille contiendra la distance (en nombre de pas) pour atteindre la cible de l'équipe.
+     * @param grille La grille de jeu contenant les obstacles.
+     * @param equipe L'équipe pour laquelle on calcule le chemin (contient la cible).
+     * @return Un objet GrilleGradient contenant les distances.
+     */
+    public GrilleGradient calcul(Grille grille, IntEquipe equipe){
         int largeur = grille.getLargeur();
         int hauteur = grille.getHauteur();
 

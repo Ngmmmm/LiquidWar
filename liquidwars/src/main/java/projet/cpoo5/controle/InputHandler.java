@@ -9,6 +9,10 @@ import projet.cpoo5.modele.Grille;
 import projet.cpoo5.util.Point;
 import projet.cpoo5.vue.GameCanvas;
 
+/**
+ * Gère les interactions utilisateurs (Souris et Clavier).
+ * Met à jour la cible (curseur) des équipes humaines.
+ */
 public class InputHandler {
 
     private final Equipe joueur1; 
@@ -22,8 +26,14 @@ public class InputHandler {
     private final Grille grille;
 
     /**
-     * @param width Largeur de la grille (pour borner les mouvements)
-     * @param height Hauteur de la grille
+     * Initialise les écouteurs d'événements sur la scène.
+     * @param scene La scène JavaFX 
+     * @param canvas Le canvas pour convertir les coordonnées écran/jeu.
+     * @param joueur1 L'équipe contrôlée à la souris.
+     * @param joueur2 L'équipe contrôlée au clavier (peut être null).
+     * @param width Largeur de la grille (pour borner les mouvements).
+     * @param height Hauteur de la grille.
+     * @param grille La référence à la grille pour vérifier les obstacles.
      */
     public InputHandler(Scene scene, GameCanvas canvas, Equipe joueur1, Equipe joueur2, int width, int height, Grille grille) {
         this.joueur1 = joueur1;

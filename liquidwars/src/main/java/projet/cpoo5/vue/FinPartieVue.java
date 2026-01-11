@@ -8,7 +8,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
-public class FinPartieVue {
+/**
+ * Classe utilitaire créant l'interface de fin de partie (overlay).
+ * Affiche le message de victoire et un bouton de retour au menu.
+ */
+public final class FinPartieVue {
 
     /**
      * Crée le panneau visuel de fin de partie.
