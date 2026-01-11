@@ -12,6 +12,8 @@ import java.util.concurrent.Future;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -49,10 +51,26 @@ public final class LiquidWarApp extends Application {
      */
     @Override
     public void start(Stage stage) {
+
+        Thread.currentThread().setUncaughtExceptionHandler((thread, throwable) -> {
+            afficherErreurSimple(throwable);
+        });
         this.primaryStage = stage;
         
         MenuVue menu = new MenuVue(stage, this);
         menu.afficher();
+    }
+
+    private void afficherErreurSimple(Throwable e) {
+        e.printStackTrace(); // On garde la trace dans la console pour toi
+        
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle("Erreur");
+        alert.setHeaderText("Une erreur est survenue");
+        // Affiche juste le message simple (ex: "NullPointerException")
+        alert.setContentText(e.toString()); 
+        
+        alert.showAndWait();
     }
 
     /**
