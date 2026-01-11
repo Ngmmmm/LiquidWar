@@ -31,7 +31,7 @@ public final class BotFacile extends Bot {
      * @param grilleJeu La grille de jeu
      * @param equipesAdverses La liste des équipes adverses
      */
-    public BotFacile(Equipe equipeControlee, Grille grilleJeu, List<Equipe> equipesAdverses) {
+    protected BotFacile(Equipe equipeControlee, Grille grilleJeu, List<Equipe> equipesAdverses) {
         super(equipeControlee, grilleJeu, equipesAdverses);
     }
 

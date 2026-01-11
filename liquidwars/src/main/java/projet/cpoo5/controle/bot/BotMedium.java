@@ -26,7 +26,7 @@ public final class BotMedium extends Bot {
      * @param grilleJeu La grille de jeu
      * @param equipesAdverses La liste des équipes adverses
      */
-    public BotMedium(Equipe equipeControlee, Grille grilleJeu, List<Equipe> equipesAdverses) {
+    protected BotMedium(Equipe equipeControlee, Grille grilleJeu, List<Equipe> equipesAdverses) {
         super(equipeControlee, grilleJeu, equipesAdverses);
     }
 

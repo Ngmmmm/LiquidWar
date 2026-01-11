@@ -24,7 +24,7 @@ public final class BFS {
      * @param equipe L'équipe pour laquelle on calcule le chemin (contient la cible).
      * @return Un objet GrilleGradient contenant les distances.
      */
-    public GrilleGradient calcul(Grille grille, Equipe equipe){
+    public GrilleGradient calcul(Grille grille, IntEquipe equipe){
         int largeur = grille.getLargeur();
         int hauteur = grille.getHauteur();
 

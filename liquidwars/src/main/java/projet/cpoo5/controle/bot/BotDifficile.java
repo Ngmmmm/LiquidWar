@@ -24,7 +24,7 @@ public final class BotDifficile extends Bot {
      * @param grille La grille de jeu
      * @param adversaire La liste des équipes adverses
      */
-    public BotDifficile(Equipe equipe, Grille grille, List<Equipe> adversaire) {
+    protected BotDifficile(Equipe equipe, Grille grille, List<Equipe> adversaire) {
         super(equipe, grille, adversaire);
     }
 
